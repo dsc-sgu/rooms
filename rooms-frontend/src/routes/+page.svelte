@@ -9,9 +9,11 @@
     <input type="text" id="room-name" class="p-2 font-medium rounded-lg outline-none" />
     <button
       type="submit"
-      class="p-2 mt-3 bg-indigo-500 rounded-lg text-xl text-white hover:bg-indigo-400 transition duration-100 font-semibold"
-      >Создать комнату</button
+      class="p-2 mt-3 bg-indigo-500 rounded-lg text-xl text-white enabled:hover:bg-indigo-400 disabled:opacity-75 transition duration-100 font-semibold"
+      disabled
     >
+      Создать комнату
+    </button>
   </form>
 
   <UploadRoomImg />
