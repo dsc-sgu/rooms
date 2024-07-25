@@ -2,6 +2,7 @@
   export let num: number;
   export let isFree: boolean;
   export let filled: boolean;
+  export let size: number;
 
   function classes() {
     if (filled) {
@@ -16,7 +17,9 @@
 </script>
 
 <div
-  class={'w-20 h-20 rounded-full flex justify-center items-center font-bold text-3xl ' + classes()}
+  class={'size rounded-full flex justify-center items-center font-bold 2xl:text-3xl xl:text-xl text-sm ' + classes()}
+  style:width={`${size}px`}
+  style:height={`${size}px`}
 >
   {num}
 </div>

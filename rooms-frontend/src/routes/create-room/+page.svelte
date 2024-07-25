@@ -1,6 +1,7 @@
 <script lang="ts">
   import UploadRoomImg from '$lib/upload-room-img.svelte';
   import Wrapper from '$lib/wrapper.svelte';
+  import RoomView from '$lib/room-view.svelte';
 
   let imageUrl: string | null = '123';
 </script>
@@ -26,19 +27,10 @@
   {#if imageUrl === null}
     <UploadRoomImg />
   {:else}
-    <div class="h-full flex flex-col justify-center">
-      <span class="text-4xl font-bold">Комната</span>
-      <img
-        src="/room.png"
-        class="object-contain max-w-full max-h-full img-height w-auto h-auto mt-2"
-        alt="room"
-      />
-    </div>
+    <RoomView
+      roomName="Комната"
+      desks={[{ isFree: true, isSelected: false, num: 1, posX: 145, posY: 790 }]}
+      imgUrl="/room.png"
+    />
   {/if}
 </Wrapper>
-
-<style>
-  .img-height {
-    max-height: calc(100% - 50px);
-  }
-</style>
