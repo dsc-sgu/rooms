@@ -56,9 +56,8 @@
   });
 
   function onClickImg(e: MouseEvent) {
-    const posX = transformCoordSystemBack({ pos: e.clientX, ...coordSystemX });
-    const posY = transformCoordSystemBack({ pos: e.clientY, ...coordSystemY });
-    console.log(Math.max(...desks.map((d) => d.num)));
+    const posX = transformCoordSystemBack({ pos: e.clientX, ...coordSystemX }) - size / 2;
+    const posY = transformCoordSystemBack({ pos: e.clientY, ...coordSystemY }) - size / 2;
     const num = desks.length === 0 ? 1 : Math.max(...desks.map((d) => d.num)) + 1;
 
     desks = [
