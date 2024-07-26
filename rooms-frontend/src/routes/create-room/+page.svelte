@@ -2,8 +2,11 @@
   import UploadRoomImg from '$lib/upload-room-img.svelte';
   import Wrapper from '$lib/wrapper.svelte';
   import RoomView from '$lib/room-view.svelte';
+  import type { Desk } from '$lib/desk';
 
   let imageUrl: string | null = '123';
+
+  let desks: Desk[] = [];
 </script>
 
 <Wrapper>
@@ -27,10 +30,6 @@
   {#if imageUrl === null}
     <UploadRoomImg />
   {:else}
-    <RoomView
-      roomName="Комната"
-      desks={[{ isFree: true, isSelected: false, num: 1, posX: 145, posY: 790 }]}
-      imgUrl="/room.png"
-    />
+    <RoomView roomName="Комната" {desks} imgUrl="/room.png" />
   {/if}
 </Wrapper>

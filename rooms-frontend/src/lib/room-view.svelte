@@ -2,19 +2,17 @@
   import DeskMark from './desk-mark.svelte';
   import { browser } from '$app/environment';
   import { onMount } from 'svelte';
-  import { defaultCoordSystem, transformCoordSystem, type CoordSystem } from './coord-system';
+  import {
+    defaultCoordSystem,
+    transformCoordSystem,
+    transformCoordSystemBack,
+    type CoordSystem
+  } from './coord-system';
+  import type { Desk } from './desk';
 
   export let roomName: string;
   export let desks: Desk[];
   export let imgUrl: string;
-
-  type Desk = {
-    isFree: boolean;
-    isSelected: boolean;
-    num: number;
-    posX: number;
-    posY: number;
-  };
 
   let img: HTMLImageElement | undefined;
 
@@ -26,8 +24,8 @@
   $: desksWithTransformatedPositions = desks.map((d) => ({
     ...d,
     posX: transformCoordSystem({ pos: d.posX, ...coordSystemX }),
-    posY: transformCoordSystem({ pos: d.posY, ...coordSystemY }),
-  }))
+    posY: transformCoordSystem({ pos: d.posY, ...coordSystemY })
+  }));
 
   function calculateCoordSystems() {
     const imgRect = img?.getBoundingClientRect();
@@ -35,14 +33,14 @@
     coordSystemX = {
       actualImgSize: imgRect?.width ?? 0,
       originalImgSize: img?.naturalWidth ?? 0,
-      imgPos: imgRect?.x ?? 0,
-    }
+      imgPos: imgRect?.x ?? 0
+    };
 
     coordSystemY = {
       actualImgSize: imgRect?.height ?? 0,
       originalImgSize: img?.naturalHeight ?? 0,
-      imgPos: imgRect?.y ?? 0,
-    }
+      imgPos: imgRect?.y ?? 0
+    };
 
     size = (imgRect?.height || 0) * 0.07;
   }
@@ -54,15 +52,33 @@
 
     window.addEventListener('resize', () => {
       calculateCoordSystems();
-    })
-  })
+    });
+  });
+
+  function onClickImg(e: MouseEvent) {
+    const posX = transformCoordSystemBack({ pos: e.clientX, ...coordSystemX });
+    const posY = transformCoordSystemBack({ pos: e.clientY, ...coordSystemY });
+    console.log(Math.max(...desks.map((d) => d.num)));
+    const num = desks.length === 0 ? 1 : Math.max(...desks.map((d) => d.num)) + 1;
+
+    desks = [
+      ...desks,
+      {
+        isFree: true,
+        isSelected: false,
+        posX,
+        posY,
+        num
+      }
+    ];
+  }
 </script>
 
 {#if browser}
   <div class="h-full">
     {#each desksWithTransformatedPositions as desk (desk.num)}
       <div class="absolute" style:left={`${desk.posX}px`} style:top={`${desk.posY}px`}>
-        <DeskMark size={size} num={1} isFree={true} filled={true}></DeskMark>
+        <DeskMark {size} num={desk.num} isFree={true} filled={true}></DeskMark>
       </div>
     {/each}
     <div class="h-full flex flex-col justify-center">
@@ -72,6 +88,7 @@
         src={imgUrl}
         class="object-contain max-w-full max-h-full img-height w-auto h-auto mt-2"
         alt="room"
+        on:click={onClickImg}
       />
     </div>
   </div>

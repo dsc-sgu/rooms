@@ -8,8 +8,8 @@ export function defaultCoordSystem(): CoordSystem {
   return {
     actualImgSize: 1,
     originalImgSize: 1,
-    imgPos: 0,
-  }
+    imgPos: 0
+  };
 }
 
 export function transformCoordSystem({
@@ -17,7 +17,7 @@ export function transformCoordSystem({
   actualImgSize,
   originalImgSize,
   imgPos
-}: {pos: number} & CoordSystem): number {
+}: { pos: number } & CoordSystem): number {
   return Math.round(pos * (actualImgSize / originalImgSize) + imgPos);
 }
 
@@ -26,6 +26,6 @@ export function transformCoordSystemBack({
   actualImgSize,
   originalImgSize,
   imgPos
-}: {pos: number} & CoordSystem): number {
+}: { pos: number } & CoordSystem): number {
   return Math.round((pos - imgPos) * (originalImgSize / actualImgSize));
 }
