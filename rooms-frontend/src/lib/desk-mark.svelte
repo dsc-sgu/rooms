@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let num: number;
   export let isFree: boolean;
   export let filled: boolean;
   export let size: number;
@@ -22,5 +21,5 @@
   style:width={`${size}px`}
   style:height={`${size}px`}
 >
-  {num}
+  <slot></slot>
 </div>

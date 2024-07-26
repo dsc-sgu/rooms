@@ -78,7 +78,7 @@
   <div class="h-full">
     {#each desksWithTransformatedPositions as desk (desk.num)}
       <div class="absolute" style:left={`${desk.posX}px`} style:top={`${desk.posY}px`}>
-        <DeskMark {size} num={desk.num} isFree={true} filled={true}></DeskMark>
+        <DeskMark {size} isFree={true} filled={true}>{desk.num}</DeskMark>
       </div>
     {/each}
     <div class="h-full flex flex-col justify-center">
