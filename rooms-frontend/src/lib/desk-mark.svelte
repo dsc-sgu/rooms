@@ -17,7 +17,7 @@
 </script>
 
 <div
-  class={'size rounded-full flex justify-center items-center font-bold 2xl:text-3xl xl:text-xl text-sm ' +
+  class={'size rounded-full flex justify-center items-center font-bold 2xl:text-3xl xl:text-xl text-sm select-none ' +
     classes()}
   style:width={`${size}px`}
   style:height={`${size}px`}
