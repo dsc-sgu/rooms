@@ -83,6 +83,8 @@
     {/each}
     <div class="h-full flex flex-col justify-center">
       <span class="text-4xl font-bold">{roomName}</span>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <img
         bind:this={img}
         src={imgUrl}
