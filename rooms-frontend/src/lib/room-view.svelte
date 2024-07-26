@@ -40,7 +40,7 @@
   });
 
   function addDesk(e: MouseEvent) {
-    if (!editorMode) {
+    if (!editorMode || !mouseInAllowableArea(e)) {
       return;
     }
 
@@ -60,19 +60,12 @@
     ];
   }
 
+  function deleteDesk(num: number) {
+    desks = desks.filter((d) => d.num !== num);
+  }
+
   function changeDeskMarkCursor(e: MouseEvent) {
-    const imgRect = img?.getBoundingClientRect();
-    if (!imgRect) {
-      return;
-    }
-
-    const mouseInAllowableArea =
-      e.clientX - deskMarkSize / 2 >= imgRect.left &&
-      e.clientX + deskMarkSize / 2 <= imgRect.right &&
-      e.clientY - deskMarkSize / 2 >= imgRect.top &&
-      e.clientY + deskMarkSize / 2 <= imgRect.bottom;
-
-    deskMarkCursorShow = mouseInAllowableArea;
+    deskMarkCursorShow = mouseInAllowableArea(e);
     deskMarkCursorPosX = e.clientX - deskMarkSize / 2;
     deskMarkCursorPosY = e.clientY - deskMarkSize / 2;
   }
@@ -94,32 +87,53 @@
 
     deskMarkSize = (imgRect?.height || 0) * 0.07;
   }
+
+  function mouseInAllowableArea(e: MouseEvent) {
+    const imgRect = img?.getBoundingClientRect();
+    if (!imgRect) {
+      return false;
+    }
+
+    return (
+      e.clientX - deskMarkSize / 2 >= imgRect.left &&
+      e.clientX + deskMarkSize / 2 <= imgRect.right &&
+      e.clientY - deskMarkSize / 2 >= imgRect.top &&
+      e.clientY + deskMarkSize / 2 <= imgRect.bottom
+    );
+  }
 </script>
 
 {#if browser}
   <div class="h-full">
     {#each desksWithTransformatedPositions as desk (desk.num)}
-      <div class="absolute" style:left={`${desk.posX}px`} style:top={`${desk.posY}px`}>
+      <button
+        class="absolute"
+        style:left={`${desk.posX}px`}
+        style:top={`${desk.posY}px`}
+        on:click={() => deleteDesk(desk.num)}
+      >
         <DeskMark size={deskMarkSize} isFree={true} filled={true}>{desk.num}</DeskMark>
-      </div>
+      </button>
     {/each}
     <div class="h-full flex flex-col justify-center">
       {#if editorMode}
-        <button
-          class="absolute opacity-75 cursor-default"
+        <div
+          class="absolute opacity-75 cursor-default pointer-events-none"
           style:left={`${deskMarkCursorPosX}px`}
           style:top={`${deskMarkCursorPosY}px`}
-          on:click={addDesk}
           style:display={deskMarkCursorShow ? 'block' : 'none'}
         >
           <DeskMark size={deskMarkSize} isFree={true} filled={true} />
-        </button>
+        </div>
       {/if}
 
       <span class="text-4xl font-bold">{roomName}</span>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <img
         on:load={calculateCoordSystems}
         bind:this={img}
+        on:click={addDesk}
         src={imgUrl}
         class="object-contain max-w-full max-h-full img-height w-auto h-auto mt-2"
         alt="room"
