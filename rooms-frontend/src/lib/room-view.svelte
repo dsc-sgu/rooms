@@ -20,10 +20,10 @@
   let coordSystemX: CoordSystem = defaultCoordSystem();
   let coordSystemY: CoordSystem = defaultCoordSystem();
 
-  let size: number = 0;
-
+  let deskMarkSize: number = 0;
   let deskMarkCursorPosX: number = 0;
   let deskMarkCursorPosY: number = 0;
+  let deskMarkCursorShow: boolean = false;
 
   $: desksWithTransformatedPositions = desks.map((d) => ({
     ...d,
@@ -36,7 +36,7 @@
       calculateCoordSystems();
     });
 
-    window.addEventListener('mousemove', changeDeskMarkCursorPosition);
+    window.addEventListener('mousemove', changeDeskMarkCursor);
   });
 
   function addDesk(e: MouseEvent) {
@@ -60,9 +60,21 @@
     ];
   }
 
-  function changeDeskMarkCursorPosition(e: MouseEvent) {
-    deskMarkCursorPosX = e.clientX - size / 2;
-    deskMarkCursorPosY = e.clientY - size / 2;
+  function changeDeskMarkCursor(e: MouseEvent) {
+    const imgRect = img?.getBoundingClientRect();
+    if (!imgRect) {
+      return;
+    }
+
+    const mouseInAllowableArea =
+      e.clientX - deskMarkSize / 2 >= imgRect.left &&
+      e.clientX + deskMarkSize / 2 <= imgRect.right &&
+      e.clientY - deskMarkSize / 2 >= imgRect.top &&
+      e.clientY + deskMarkSize / 2 <= imgRect.bottom;
+
+    deskMarkCursorShow = mouseInAllowableArea;
+    deskMarkCursorPosX = e.clientX - deskMarkSize / 2;
+    deskMarkCursorPosY = e.clientY - deskMarkSize / 2;
   }
 
   function calculateCoordSystems() {
@@ -80,7 +92,7 @@
       imgPos: imgRect?.y ?? 0
     };
 
-    size = (imgRect?.height || 0) * 0.07;
+    deskMarkSize = (imgRect?.height || 0) * 0.07;
   }
 </script>
 
@@ -88,7 +100,7 @@
   <div class="h-full">
     {#each desksWithTransformatedPositions as desk (desk.num)}
       <div class="absolute" style:left={`${desk.posX}px`} style:top={`${desk.posY}px`}>
-        <DeskMark {size} isFree={true} filled={true}>{desk.num}</DeskMark>
+        <DeskMark size={deskMarkSize} isFree={true} filled={true}>{desk.num}</DeskMark>
       </div>
     {/each}
     <div class="h-full flex flex-col justify-center">
@@ -98,8 +110,9 @@
           style:left={`${deskMarkCursorPosX}px`}
           style:top={`${deskMarkCursorPosY}px`}
           on:click={addDesk}
+          style:display={deskMarkCursorShow ? 'block' : 'none'}
         >
-          <DeskMark {size} isFree={true} filled={true} />
+          <DeskMark size={deskMarkSize} isFree={true} filled={true} />
         </button>
       {/if}
 
