@@ -30,6 +30,6 @@
   {#if imageUrl === null}
     <UploadRoomImg />
   {:else}
-    <RoomView roomName="Комната" {desks} imgUrl="/room.png" />
+    <RoomView roomName="Комната" {desks} imgUrl="/room.png" editorMode={true} />
   {/if}
 </Wrapper>
