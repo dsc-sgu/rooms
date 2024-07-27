@@ -6,6 +6,9 @@
 
   let imageUrl: string | null = '123';
 
+  let inputRoomName: string = '';
+  $: roomName = inputRoomName.trim() || 'Комната';
+
   let desks: Desk[] = [];
 </script>
 
@@ -16,12 +19,13 @@
       type="text"
       id="room-name"
       class="p-2 font-medium rounded-lg outline-none"
-      placeholder=""
+      placeholder="Комната"
+      bind:value={inputRoomName}
     />
     <button
       type="submit"
       class="p-2 mt-3 bg-indigo-500 rounded-lg text-xl text-white enabled:hover:bg-indigo-400 disabled:opacity-75 transition duration-100 font-semibold"
-      disabled
+      disabled={desks.length === 0}
     >
       Создать комнату
     </button>
@@ -30,6 +34,6 @@
   {#if imageUrl === null}
     <UploadRoomImg />
   {:else}
-    <RoomView roomName="Комната" {desks} imgUrl="/room.png" editorMode={true} />
+    <RoomView {roomName} bind:desks imgUrl="/room.png" editorMode={true} />
   {/if}
 </Wrapper>
