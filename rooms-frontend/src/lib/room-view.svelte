@@ -55,7 +55,7 @@
     if (editorMode) {
       desks = desks.filter((d) => d.num !== num);
     } else {
-      desks = desks.map((d) => d.num === num ? {...d, isSelected: !d.isSelected} : d);
+      desks = desks.map((d) => (d.num === num ? { ...d, isSelected: !d.isSelected } : d));
     }
   }
 
@@ -109,7 +109,9 @@
         style:top={`${desk.posY}px`}
         on:click={() => onDeskClick(desk.num)}
       >
-        <DeskMark size={deskMarkSize} isFree={desk.isFree} filled={!desk.isSelected}>{desk.num}</DeskMark>
+        <DeskMark size={deskMarkSize} isFree={desk.isFree} filled={!desk.isSelected}
+          >{desk.num}</DeskMark
+        >
       </button>
     {/each}
     <div class="h-full flex flex-col justify-center">
@@ -140,7 +142,6 @@
 {:else}
   <p>Загрузка...</p>
 {/if}
-
 
 <style>
   .img-height {
