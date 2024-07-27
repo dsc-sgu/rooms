@@ -2,7 +2,7 @@
   import UploadRoomImg from '$lib/upload-room-img.svelte';
   import Wrapper from '$lib/wrapper.svelte';
   import RoomView from '$lib/room-view.svelte';
-  import type { Desk } from '$lib/desk';
+  import type { Desk } from '$lib/types';
 
   let imageUrl: string | null = '123';
 

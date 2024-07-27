@@ -7,7 +7,7 @@
     transformCoordSystemBack,
     type CoordSystem
   } from './coord-system';
-  import type { Desk } from './desk';
+  import type { Desk } from './types';
 
   export let roomName: string;
   export let desks: Desk[];
