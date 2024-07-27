@@ -11,6 +11,7 @@
 
   export let roomName: string;
   export let desks: Desk[];
+  export let selectedDeskNum: number | null;
   export let imgUrl: string;
   export let editorMode: boolean;
 
@@ -43,7 +44,6 @@
       ...desks,
       {
         isFree: true,
-        isSelected: false,
         posX,
         posY,
         num
@@ -54,8 +54,10 @@
   function onDeskClick(num: number) {
     if (editorMode) {
       desks = desks.filter((d) => d.num !== num);
+    } else if (selectedDeskNum === num) {
+      selectedDeskNum = null;
     } else {
-      desks = desks.map((d) => (d.num === num ? { ...d, isSelected: !d.isSelected } : d));
+      selectedDeskNum = num;
     }
   }
 
@@ -102,14 +104,14 @@
 
 {#if browser}
   <div class="h-full">
-    {#each desksWithTransformatedPositions as desk (desk)}
+    {#each desksWithTransformatedPositions as desk ([desk, selectedDeskNum])}
       <button
         class="absolute"
         style:left={`${desk.posX}px`}
         style:top={`${desk.posY}px`}
         on:click={() => onDeskClick(desk.num)}
       >
-        <DeskMark size={deskMarkSize} isFree={desk.isFree} filled={!desk.isSelected}
+        <DeskMark size={deskMarkSize} isFree={desk.isFree} filled={desk.num !== selectedDeskNum}
           >{desk.num}</DeskMark
         >
       </button>

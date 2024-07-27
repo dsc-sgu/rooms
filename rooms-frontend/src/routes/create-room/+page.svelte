@@ -34,6 +34,6 @@
   {#if imageUrl === null}
     <UploadRoomImg />
   {:else}
-    <RoomView {roomName} bind:desks imgUrl="/room.png" editorMode={true} />
+    <RoomView {roomName} bind:desks selectedDeskNum={null} imgUrl="/room.png" editorMode={true} />
   {/if}
 </Wrapper>

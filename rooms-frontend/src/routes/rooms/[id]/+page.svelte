@@ -4,8 +4,16 @@
   import type { PageData } from './$types';
 
   export let data: PageData;
+
+  let selectedDeskNum: number | null = null;
 </script>
 
 <Wrapper>
-  <RoomView roomName={data.name} desks={data.desks} imgUrl={data.imgUrl} editorMode={false} />
+  <RoomView
+    bind:selectedDeskNum
+    roomName={data.name}
+    desks={data.desks}
+    imgUrl={data.imgUrl}
+    editorMode={false}
+  />
 </Wrapper>
