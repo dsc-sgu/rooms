@@ -1,7 +1,6 @@
 <script lang="ts">
   import DeskMark from './desk-mark.svelte';
   import { browser } from '$app/environment';
-  import { onMount } from 'svelte';
   import {
     defaultCoordSystem,
     transformCoordSystem,
@@ -52,8 +51,12 @@
     ];
   }
 
-  function deleteDesk(num: number) {
-    desks = desks.filter((d) => d.num !== num);
+  function onDeskClick(num: number) {
+    if (editorMode) {
+      desks = desks.filter((d) => d.num !== num);
+    } else {
+      desks = desks.map((d) => d.num === num ? {...d, isSelected: !d.isSelected} : d);
+    }
   }
 
   function changeDeskMarkCursor(e: MouseEvent) {
@@ -99,14 +102,14 @@
 
 {#if browser}
   <div class="h-full">
-    {#each desksWithTransformatedPositions as desk (desk.num)}
+    {#each desksWithTransformatedPositions as desk (desk)}
       <button
         class="absolute"
         style:left={`${desk.posX}px`}
         style:top={`${desk.posY}px`}
-        on:click={() => deleteDesk(desk.num)}
+        on:click={() => onDeskClick(desk.num)}
       >
-        <DeskMark size={deskMarkSize} isFree={true} filled={true}>{desk.num}</DeskMark>
+        <DeskMark size={deskMarkSize} isFree={desk.isFree} filled={!desk.isSelected}>{desk.num}</DeskMark>
       </button>
     {/each}
     <div class="h-full flex flex-col justify-center">
