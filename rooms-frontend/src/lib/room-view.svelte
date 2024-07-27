@@ -31,14 +31,6 @@
     posY: transformCoordSystem({ pos: d.posY, ...coordSystemY })
   }));
 
-  onMount(() => {
-    window.addEventListener('resize', () => {
-      calculateCoordSystems();
-    });
-
-    window.addEventListener('mousemove', changeDeskMarkCursor);
-  });
-
   function addDesk(e: MouseEvent) {
     if (!editorMode || !mouseInAllowableArea(e)) {
       return;
@@ -103,6 +95,8 @@
   }
 </script>
 
+<svelte:window on:resize={calculateCoordSystems} on:mousemove={changeDeskMarkCursor} />
+
 {#if browser}
   <div class="h-full">
     {#each desksWithTransformatedPositions as desk (desk.num)}
@@ -143,6 +137,7 @@
 {:else}
   <p>Загрузка...</p>
 {/if}
+
 
 <style>
   .img-height {
